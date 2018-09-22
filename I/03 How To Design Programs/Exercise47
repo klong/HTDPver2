@@ -1,0 +1,61 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname Exercise47) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; Exercise 47 - guage-prog
+(require 2htdp/image)
+(require 2htdp/universe)
+
+; DATA
+; WorldState: data that represents the
+; number of ticks since world start
+
+; CONSTANTS
+(define MAX-HAPINESS-PERCENT 100) ; 100% hapiness
+(define MIN-HAPINESS 0) ; 0% hapiness
+(define TICK-HEALTH -0.1) ; 10% decrease
+(define DOWN-ARROW-FACTOR (+ 1 1/5)) ; 1/5 factor increase
+(define UP-ARROW-FACTOR (+ 1 1/3))  ; 1/3 factor increase
+
+(define HAPINESS MAX-HAPINESS-PERCENT) ;; start hapiness level with max health
+
+; CONSTANTS GRAPHICS
+(define SCENE-WIDTH 300)
+(define PEN-NIB 3)
+(define BLACK-PEN (pen "black" PEN-NIB "solid" "round" "miter"))
+(define GUAGE-WIDTH (- SCENE-WIDTH
+                       (* PEN-NIB 2)))
+(define GUAGE-HEIGHT (- (* 1/6 SCENE-WIDTH)
+                        (* PEN-NIB 2)))
+
+; Graphic Elements
+(define GUAGE-BACKGROUND
+  (rectangle
+   GUAGE-WIDTH
+   GUAGE-HEIGHT
+   "solid"
+   "gray"))
+
+(define BORDER
+  (rectangle
+   GUAGE-WIDTH 
+   GUAGE-HEIGHT
+   "outline"
+   BLACK-PEN))
+
+; graphic helpers
+; indicator: Number -> Image
+; calulates indicator image for a given guage level [0 - 100]
+(define (indicator level)
+  (rectangle (* GUAGE-WIDTH (/ level 100))
+             GUAGE-HEIGHT "solid" "red"))
+
+; Number -> Image
+; computes guage iamge for a given level
+(define (draw-guage level)
+  (overlay/align
+   "left" "top"
+   BORDER
+   (indicator level)
+   GUAGE-BACKGROUND
+   ))                          
+
